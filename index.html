@@ -13,6 +13,24 @@
             --text-color-secondary: rgba(255, 255, 255, 0.6);
             --link-color: rgba(136, 170, 255, 1);
             --bg-color: #000;
+
+            /* Base skill button colors */
+            --skill-button-bg: rgba(136, 170, 255, 0.1);
+            --skill-button-border: rgba(136, 170, 255, 0.3);
+            --skill-button-text: rgba(136, 170, 255, 0.9);
+
+            /* Specific colors for categories */
+            --language-bg: rgba(0, 128, 0, 0.1); /* Greenish */
+            --language-border: rgba(0, 128, 0, 0.3);
+            --language-text: rgba(0, 128, 0, 0.9);
+
+            --technology-bg: rgba(255, 165, 0, 0.1); /* Orangish */
+            --technology-border: rgba(255, 165, 0, 0.3);
+            --technology-text: rgba(255, 165, 0, 0.9);
+
+            --platform-bg: rgba(135, 206, 235, 0.1); /* Sky Blue */
+            --platform-border: rgba(135, 206, 235, 0.3);
+            --platform-text: rgba(135, 206, 235, 0.9);
         }
 
         body {
@@ -94,8 +112,108 @@
         .about-text {
             color: var(--text-color-primary);
             font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        /* Styles for the skills container and buttons */
+        .skills-container {
             margin-bottom: 40px;
         }
+
+        /* NEW: Grid for the three columns */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+            gap: 20px; /* Gap between the columns */
+            align-items: start; /* Align items to the top of their grid cell */
+        }
+
+        /* Responsive adjustments for skills grid */
+        @media (max-width: 768px) {
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .skills-grid {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+        }
+
+        .skill-category-wrapper {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease-out var(--item-delay, 0s), transform 0.7s ease-out var(--item-delay, 0s);
+            /* Ensure children take full width of their grid cell */
+            width: 100%;
+        }
+
+        .skill-category-wrapper.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skill-category {
+            margin-top: 0; /* Adjusted for grid context */
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: var(--text-color-primary);
+        }
+
+        .skill-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 5px;
+            margin-bottom: 0; /* Adjusted for grid context */
+            justify-content: flex-start;
+            align-items: stretch;
+        }
+
+        .skill-button {
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            flex: 1 1 auto; /* Allow buttons to grow/shrink based on content, but try to be even */
+            text-align: center;
+        }
+
+        /* Specific styles for each skill type */
+        .skill-button.language {
+            background-color: var(--language-bg);
+            border: 1px solid var(--language-border);
+            color: var(--language-text);
+        }
+        .skill-button.language:hover {
+            background-color: rgba(0, 128, 0, 0.2);
+            border-color: rgba(0, 128, 0, 0.5);
+        }
+
+        .skill-button.technology {
+            background-color: var(--technology-bg);
+            border: 1px solid var(--technology-border);
+            color: var(--technology-text);
+        }
+        .skill-button.technology:hover {
+            background-color: rgba(255, 165, 0, 0.2);
+            border-color: rgba(255, 165, 0, 0.5);
+        }
+
+        .skill-button.platform {
+            background-color: var(--platform-bg);
+            border: 1px solid var(--platform-border);
+            color: var(--platform-text);
+        }
+        .skill-button.platform:hover {
+            background-color: rgba(135, 206, 235, 0.2);
+            border-color: rgba(135, 206, 235, 0.5);
+        }
+
 
         /* --- Two-Column Layout for Work Experience and Projects --- */
         .entry-container {
@@ -116,13 +234,25 @@
             transform: translateY(0);
         }
 
+        /* Styles for "about-content" and "links-list" to apply animation */
+        .about-content, .links-list-wrapper { /* Apply to the wrapper for links */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease-out var(--item-delay, 0s), transform 0.7s ease-out var(--item-delay, 0s);
+        }
+
+        .about-content.is-visible, .links-list-wrapper.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
         .date-column {
             flex-shrink: 0;
             width: 120px;
-            /* text-align: right; -- Removed this as flexbox will handle alignment */
-            display: flex;           /* Make it a flex container */
-            flex-direction: column;  /* Stack items vertically */
-            align-items: flex-end;   /* Align items to the right within the column */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
         }
 
         .date-column .duration {
@@ -130,7 +260,7 @@
             font-size: 0.9em;
             font-weight: 400;
             margin: 0;
-            padding-top: 0; /* Adjusted to remove space when logo is above */
+            padding-top: 0;
         }
 
         .content-column {
@@ -152,12 +282,10 @@
             margin: 0;
             color: var(--text-color-primary);
             font-size: 1em;
-            margin-top: 8px; /* Default margin for most paragraphs in this context */
+            margin-top: 8px;
             line-height: 1.5;
-            /* Removed animation properties from here, now on .entry-container */
         }
 
-        /* NEW RULE: Reduce space for the first paragraph in project-details, useful for certification issuer */
         .project-details p:first-child {
             margin-top: 0;
         }
@@ -197,12 +325,11 @@
             background-color: transparent;
         }
 
-        /* New style for the certification logo in date-column */
         .certification-logo {
             width: 25px;
             height: 25px;
             object-fit: contain;
-            margin-bottom: 5px; /* Space between logo and duration text */
+            margin-bottom: 5px;
         }
 
         .links-list {
@@ -253,7 +380,49 @@
         </div>
 
         <h2 class="section-title">About <span role="img" aria-label="person emoji">&#128100;</span></h2>
-        <p class="about-text">A highly effective engineer specialized in Infrastructure as Code, CI/CD pipelines, and advanced automation. Leveraging Python, PowerShell, Go, and Terraform, I drive operational excellence, implement robust network architectures, and streamline complex infrastructure deployments with a focus on efficiency and security.</p>
+        <div class="about-content animate-on-scroll">
+            <p class="about-text">A highly effective engineer specialized in Infrastructure as Code, CI/CD pipelines, and advanced automation. Leveraging Python, PowerShell, Go, and Terraform, I drive operational excellence, implement robust network architectures, and streamline complex infrastructure deployments with a focus on efficiency and security.</p>
+        </div>
+
+        <h2 class="section-title">Skills <span role="img" aria-label="gear emoji">&#x2699;&#xfe0f;</span></h2>
+        <div class="skills-container">
+            <div class="skills-grid"> <div class="skill-category-wrapper animate-on-scroll">
+                    <div class="skill-category">Languages</div>
+                    <div class="skill-buttons">
+                        <span class="skill-button language">Python</span>
+                        <span class="skill-button language">Go</span>
+                        <span class="skill-button language">PowerShell</span>
+                        <span class="skill-button language">Bash</span>
+                        <span class="skill-button language">HTML</span>
+                        <span class="skill-button language">CSS</span>
+                        <span class="skill-button language">SQL</span>
+                    </div>
+                </div>
+
+                <div class="skill-category-wrapper animate-on-scroll">
+                    <div class="skill-category">Technologies</div>
+                    <div class="skill-buttons">
+                        <span class="skill-button technology">Terraform</span>
+                        <span class="skill-button technology">CI/CD</span>
+                        <span class="skill-button technology">Cisco</span>
+                        <span class="skill-button technology">Palo Alto</span>
+                        <span class="skill-button technology">F5</span>
+                        <span class="skill-button technology">Zabbix</span>
+                        <span class="skill-button technology">Dynatrace</span>
+                        <span class="skill-button technology">SDWAN</span>
+                    </div>
+                </div>
+
+                <div class="skill-category-wrapper animate-on-scroll">
+                    <div class="skill-category">Platforms</div>
+                    <div class="skill-buttons">
+                        <span class="skill-button platform">Azure</span>
+                        <span class="skill-button platform">VMWare</span>
+                        <span class="skill-button platform">Linux</span>
+                        <span class="skill-button platform">Windows</span>
+                    </div>
+                </div>
+            </div> </div>
 
         <h2 class="section-title">Work Experience <span role="img" aria-label="briefcase emoji">&#127891;</span></h2>
 
@@ -296,7 +465,7 @@
             </div>
         </div>
 
-        <h2 class="section-title">Certifications</h2>
+        <h2 class="section-title">Certifications<span role="img" aria-label="trophy emoji">&#127942;</span></h2>
 
         <div class="entry-container animate-on-scroll">
             <div class="date-column">
@@ -318,7 +487,7 @@
                 <h3>Cisco</h3>
                 <div class="project-details">
                     <p>Certified Specialist - Security (SCOR)<br>
-                            Certified Network Associate (CCNA)</p>
+                                Certified Network Associate (CCNA)</p>
                     </div>
             </div>
         </div>
@@ -336,17 +505,18 @@
         </div>
 
         <h2 class="section-title">Links <span role="img" aria-label="link emoji">&#128279;</span></h2>
-        <ul class="links-list">
-            <li><span>Github</span> <a href="https://github.com/calebwebb" target="_blank" rel="noopener noreferrer">@calebwebb &#x2197;</a></li>
-            <li><span>Linkedin</span> <a href="https://linkedin.com/in/caleb-webb" target="_blank" rel="noopener noreferrer">in/caleb-webb &#x2197;</a></li>
-        </ul>
+        <div class="links-list-wrapper animate-on-scroll">
+            <ul class="links-list">
+                <li><span>Github</span> <a href="https://github.com/calebwebb" target="_blank" rel="noopener noreferrer">@calebwebb &#x2197;</a></li>
+                <li><span>Linkedin</span> <a href="https://linkedin.com/in/caleb-webb" target="_blank" rel="noopener noreferrer">in/caleb-webb &#x2197;</a></li>
+            </ul>
+        </div>
 
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Select all entry containers that should animate
-            const animateElements = document.querySelectorAll('.entry-container.animate-on-scroll');
+            const animateElements = document.querySelectorAll('.animate-on-scroll');
 
             const observerOptions = {
                 root: null, // Use the viewport as the root
@@ -357,9 +527,8 @@
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Element is in view, add the 'is-visible' class
                         entry.target.classList.add('is-visible');
-                        // Optionally, stop observing once it's animated to save resources
+                        // If you want the animation to run only once, uncomment the line below:
                         // observer.unobserve(entry.target);
                     } else {
                         // If you want the animation to reset when scrolling out of view, uncomment this:
@@ -368,15 +537,11 @@
                 });
             }, observerOptions);
 
-            // Observe each element and apply a staggered delay
             animateElements.forEach((element, index) => {
-                // Set a custom CSS property for the staggered delay
-                element.style.setProperty('--item-delay', `${index * 0.1}s`); // 0.1s delay between each item
+                element.style.setProperty('--item-delay', `${index * 0.08}s`);
                 observer.observe(element);
             });
         });
     </script>
 </body>
 </html>
-
-
