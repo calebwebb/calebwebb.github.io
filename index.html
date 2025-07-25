@@ -1,13 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Hello, world!</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
-  <link rel="icon" href="favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caleb Webb - Platform Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-color-primary: rgba(255, 255, 255, 0.8);
+            --text-color-secondary: rgba(255, 255, 255, 0.6);
+            --link-color: rgba(136, 170, 255, 1);
+            --bg-color: #000;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color-primary);
+            margin: 0;
+            padding: 40px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 25px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            color: rgba(255, 255, 255, 0.95);
+            margin: 0;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--text-color-secondary);
+            margin-top: 2px;
+            margin-bottom: 5px;
+            font-size: 1em;
+            font-weight: 400;
+        }
+
+        .download-resume {
+            margin-top: 0px;
+        }
+        .download-resume a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .download-resume a:hover {
+            text-decoration: underline;
+        }
+
+        .section-title {
+            color: rgba(255, 255, 255, 0.95);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.25em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title span {
+            font-size: 1.2em;
+        }
+
+        .about-text {
+            color: var(--text-color-primary);
+            font-size: 1em;
+            margin-bottom: 40px;
+        }
+
+        /* --- Two-Column Layout for Work Experience and Projects --- */
+        .entry-container {
+            display: flex;
+            margin-bottom: 30px;
+            gap: 20px;
+
+            /* Animation initial state for the entire entry container */
+            opacity: 0;
+            transform: translateY(20px); /* Start 20px below its final position */
+            /* Use a CSS variable for the delay, set by JavaScript for staggering */
+            transition: opacity 0.7s ease-out var(--item-delay, 0s), transform 0.7s ease-out var(--item-delay, 0s);
+        }
+
+        /* Animation final state (when 'is-visible' class is added) */
+        .entry-container.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .date-column {
+            flex-shrink: 0;
+            width: 120px;
+            /* text-align: right; -- Removed this as flexbox will handle alignment */
+            display: flex;           /* Make it a flex container */
+            flex-direction: column;  /* Stack items vertically */
+            align-items: flex-end;   /* Align items to the right within the column */
+        }
+
+        .date-column .duration {
+            color: var(--text-color-secondary);
+            font-size: 0.9em;
+            font-weight: 400;
+            margin: 0;
+            padding-top: 0; /* Adjusted to remove space when logo is above */
+        }
+
+        .content-column {
+            flex-grow: 1;
+        }
+
+        .content-column h3 {
+            color: rgba(255, 255, 255, 0.95);
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .work-description p,
+        .project-details p {
+            margin: 0;
+            color: var(--text-color-primary);
+            font-size: 1em;
+            margin-top: 8px; /* Default margin for most paragraphs in this context */
+            line-height: 1.5;
+            /* Removed animation properties from here, now on .entry-container */
+        }
+
+        /* NEW RULE: Reduce space for the first paragraph in project-details, useful for certification issuer */
+        .project-details p:first-child {
+            margin-top: 0;
+        }
+
+        .technologies {
+            color: var(--text-color-secondary);
+            font-size: 0.9em;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+
+        .external-link {
+            font-size: 0.7em;
+            vertical-align: super;
+            margin-left: 3px;
+            color: var(--link-color);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .external-link:hover {
+            opacity: 1;
+        }
+
+        .project-details {
+            margin-left: 0px;
+        }
+
+        .project-logo {
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 8px;
+            object-fit: contain;
+            background-color: transparent;
+        }
+
+        /* New style for the certification logo in date-column */
+        .certification-logo {
+            width: 25px;
+            height: 25px;
+            object-fit: contain;
+            margin-bottom: 5px; /* Space between logo and duration text */
+        }
+
+        .links-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+
+        .links-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .links-list span {
+            color: var(--text-color-primary);
+            font-size: 1em;
+            font-weight: 400;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .links-list a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            opacity: 0.9;
+        }
+
+        .links-list a:hover {
+            text-decoration: underline;
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
+    <div class="container">
+        <div class="header">
+            <img src="image.jpeg" alt="Caleb Webb Profile Picture" class="profile-pic">
+            <div>
+                <h1>Caleb Webb</h1>
+                <p class="subtitle">Network & DevOps Engineer</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">About <span role="img" aria-label="person emoji">&#128100;</span></h2>
+        <p class="about-text">A highly effective engineer specialized in Infrastructure as Code, CI/CD pipelines, and advanced automation. Leveraging Python, PowerShell, Go, and Terraform, I drive operational excellence, implement robust network architectures, and streamline complex infrastructure deployments with a focus on efficiency and security.</p>
+
+        <h2 class="section-title">Work Experience <span role="img" aria-label="briefcase emoji">&#127891;</span></h2>
+
+        <div class="entry-container animate-on-scroll">
+            <div class="date-column">
+                <p class="duration">2025 &ndash; present</p>
+            </div>
+            <div class="content-column">
+                <h3>Senior Infrastructure Engineer &ndash; Hollard Insurance<a href="#" class="external-link" target="_blank" rel="noopener noreferrer">&#x2197;</a></h3>
+                <div class="work-description">
+                    <p>Enhanced infrastructure health checks and monitoring processes. Developed strategic roadmap to automate health checks, and operational tasks to improve efficiency and incident response.</p>
+                </div>
+                <p class="technologies">Azure • VMWare • PowerShell • Bicep </p>
+            </div>
+        </div>
+
+        <div class="entry-container animate-on-scroll">
+            <div class="date-column">
+                <p class="duration">2024 &ndash; 2025</p>
+            </div>
+            <div class="content-column">
+                <h3>Network Engineer (Projects) &ndash; BAE Systems Australia <a href="#" class="external-link" target="_blank" rel="noopener noreferrer">&#x2197;</a></h3>
+                <div class="work-description">
+                    <p>I led the design and implementation of critical network infrastructure, including wired network access control with Cisco ISE and comprehensive monitoring via Zabbix. Overseeing data center migrations to software-defined architectures using Terraform and managed F5 and Palo Alto firewall platforms, ensuring robust security and load balancing. Additionally, I optimized CI/CD pipelines with Jenkins and GitLab, developed extensive Python and Bash automation scripts, and contributed to LAN/WAN/WLAN design for new sites.</p>
+                </div>
+                <p class="technologies">CI/CD Pipelines • IaC • Python • ISE • Palo Alto • F5</p>
+            </div>
+        </div>
+
+        <div class="entry-container animate-on-scroll">
+            <div class="date-column">
+                <p class="duration">2021 &ndash; 2024</p>
+            </div>
+            <div class="content-column">
+                <h3>Network Engineer &ndash; Monash Health <a href="#" class="external-link" target="_blank" rel="noopener noreferrer">&#x2197;</a></h3>
+                <div class="work-description">
+                    <p>Led critical technical projects across Cisco Networking, Security, and Collaboration, spearheading large-scale deployments like the 800+ switch replacement with Cisco DNAC and PnP, and designing comprehensive voice solutions including Webex Contact Centre and Call Manager. I also contributed to wide-ranging wireless and wired NAC implementations across 50+ clinics and hospitals, while driving significant operational efficiencies through extensive automation using Python and PowerShell, resulting in over $190K in annual savings.</p>
+                </div>
+                <p class="technologies">Cisco • Python • RADIUS • PowerShell </p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Certifications</h2>
+
+        <div class="entry-container animate-on-scroll">
+            <div class="date-column">
+                <p class="duration">2025</p>
+            </div>
+            <div class="content-column">
+                <h3>Microsoft</h3>
+                <div class="project-details">
+                    <p>Azure Network Engineer Associate</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="entry-container animate-on-scroll">
+            <div class="date-column">
+                <p class="duration">2023</p>
+            </div>
+            <div class="content-column">
+                <h3>Cisco</h3>
+                <div class="project-details">
+                    <p>Certified Specialist - Security (SCOR)<br>
+                            Certified Network Associate (CCNA)</p>
+                    </div>
+            </div>
+        </div>
+
+        <div class="entry-container animate-on-scroll">
+            <div class="date-column">
+                <p class="duration">2022</p>
+            </div>
+            <div class="content-column">
+                <h3>Ekahau</h3>
+                <div class="project-details">
+                    <p>ECSE Design</p>
+                    </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Links <span role="img" aria-label="link emoji">&#128279;</span></h2>
+        <ul class="links-list">
+            <li><span>Github</span> <a href="https://github.com/calebwebb" target="_blank" rel="noopener noreferrer">@calebwebb &#x2197;</a></li>
+            <li><span>Linkedin</span> <a href="https://linkedin.com/in/caleb-webb" target="_blank" rel="noopener noreferrer">in/caleb-webb &#x2197;</a></li>
+        </ul>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select all entry containers that should animate
+            const animateElements = document.querySelectorAll('.entry-container.animate-on-scroll');
+
+            const observerOptions = {
+                root: null, // Use the viewport as the root
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Element is in view, add the 'is-visible' class
+                        entry.target.classList.add('is-visible');
+                        // Optionally, stop observing once it's animated to save resources
+                        // observer.unobserve(entry.target);
+                    } else {
+                        // If you want the animation to reset when scrolling out of view, uncomment this:
+                        // entry.target.classList.remove('is-visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe each element and apply a staggered delay
+            animateElements.forEach((element, index) => {
+                // Set a custom CSS property for the staggered delay
+                element.style.setProperty('--item-delay', `${index * 0.1}s`); // 0.1s delay between each item
+                observer.observe(element);
+            });
+        });
+    </script>
 </body>
 </html>
+
+
